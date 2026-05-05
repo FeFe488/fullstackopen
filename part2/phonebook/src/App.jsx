@@ -2,7 +2,7 @@
 
 
 import { useState, useEffect } from "react"
-import personService from "./api/persons"
+import personService from "./services/persons"
 
 
 const Notification = ({ message, type }) => {
