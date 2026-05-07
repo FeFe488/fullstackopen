@@ -22,6 +22,7 @@ app.use(express.json())
 app.get ('/', (req, res)=>{
         res.send('<h1>hello phonebook</h1>')
     })
+    
 
 
 app.get ('/api/persons', (req, res)=>{
@@ -30,13 +31,17 @@ app.get ('/api/persons', (req, res)=>{
     })
 })
 
+    
+
 app.get('/api/persons/:id', (req,res) => {
+    const id=req.params.id
     Person.findById(req.params.id).then((entry)=>{
+        console.log("found entry with:",id)
         res.json(entry)
     })
 })
 
-app.post('/api/persons/:id' ,(req,res)=>{
+app.post('/api/persons' ,(req,res)=>{
     const body= req.body
 
     if(!body.name){
