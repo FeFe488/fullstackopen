@@ -16,8 +16,9 @@ const requestLogger= (req,res,next)=>{
     next()    
 }
 
-app.use (requestLogger)
+
 app.use(express.static('dist'))
+app.use (requestLogger)
 
 
 app.get ('/', (req, res)=>{
