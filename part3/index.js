@@ -65,11 +65,15 @@ app.post('/api/persons' ,(req,res)=>{
     })
 })
 
-app.delete('/api/persons/:id',(req,res) =>{
-    const id= req.params.id
-    entry= entires.filter((entry)=> entry.id!==id)
+app.delete('/api/persons/:id',(req,res, next) =>{
+    Person.findByIdAndDelete(req.params.id)
+        .then(result=> {
+            res.status(204).end()
+        })
+//     const id= req.params.id
+//     entry= entires.filter((entry)=> entry.id!==id)
 
-    res.status(204).end()
+//     res.status(204).end()
 })
 
 const unknownEndpoint= (req,res)=> {
