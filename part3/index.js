@@ -16,8 +16,9 @@ const requestLogger= (req,res,next)=>{
 }
 
 app.use (requestLogger)
-app.use(express.static('dist'))
 app.use(express.json())
+app.use(express.static('dist'))
+
 
 app.get ('/', (req, res)=>{
         res.send('<h1>hello phonebook</h1>')
