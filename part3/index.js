@@ -4,6 +4,7 @@ const express=require('express')
 const Person= require('./models/person')
 
 const app=express()
+app.use(express.json())
 
 let entries=[]
 
@@ -16,7 +17,6 @@ const requestLogger= (req,res,next)=>{
 }
 
 app.use (requestLogger)
-app.use(express.json())
 app.use(express.static('dist'))
 
 
