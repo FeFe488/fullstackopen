@@ -21,15 +21,32 @@ app.use (requestLogger)
 
 app.get ('/', (req, res)=>{
         res.send('<h1>hello phonebook</h1>')
-    })
-    
+})
 
+
+
+app.get('/info', (req,res) => {
+    Person.countDocuments({})
+    .then(count=>{
+        const date= new Date()
+        res.send(`
+        <p>Phonebook has info for ${count} people</p>
+        <p> ${date}</p>
+        `)
+    })
+    .catch(error=> next(error))
+})
+
+
+    
 
 app.get ('/api/persons', (req, res)=>{
     Person.find({}).then((entires)=>{
         res.json(entires)
     })
 })
+
+
 
     
 app.get('/api/persons/:id', (req,res,next) => {
