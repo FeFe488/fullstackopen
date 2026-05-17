@@ -1,1 +1,5 @@
-node_moules
+
+
+node_modules/
+dist/
+.env
