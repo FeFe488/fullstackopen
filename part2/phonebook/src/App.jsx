@@ -128,6 +128,13 @@ const App = () => {
           setMessage(null)
         }, 4000)
       })
+      .catch(error=>{
+        setMessage(`${error.response.data.error}`)
+        setNotificationType("error")
+        setTimeout(()=>{
+          setMessage(null)
+        },4000)
+      })
   }
 
   const deletePerson =(id,name) => {
