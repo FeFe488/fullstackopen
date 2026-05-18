@@ -81,34 +81,42 @@ const App = () => {
     const duplictae = persons.find(person => person.name ==newName)
 
     if (duplictae) {
-      if (window.confirm(`${newName} is already added to phonebook! replace?`))
-        {const changedPerson = { ...duplictae,number: newNumber }
+      if (window.confirm(`${newName} is already added to phonebook! replace?`)) {
+        const changedPerson = { ...duplictae, number: newNumber }
 
-        personService
-          .update(duplictae.id, changedPerson)
-          .then(returnedPerson => {
-          
-            setPersons(persons.map(person => person.id !== duplictae.id ? person : returnedPerson))
-            setNewName("")
-            setNewNumber("")
-            setMessage(`Updated ${returnedPerson.name}'s number`)
-            setNotificationType("success")
-            setTimeout(() => {
-              setMessage(null)
-            }, 4000)
-          })
+    personService
+      .update(duplictae.id, changedPerson)
+      .then(returnedPerson => {
+        setPersons(persons.map(person =>
+          person.id === duplictae.id ? returnedPerson : person))
+        setNewName('')
+        setNewNumber('')
+        setMessage(`Updated ${returnedPerson.name}'s number`)
+        setNotificationType('success')
+        setTimeout(() => {
+          setMessage(null)
+        }, 4000)
+      })
+      .catch(error => {
+        const status = error.response?.status
 
-          .catch(error => {
-            setMessage(`Information of ${duplictae.name} has already been removed from server`)
-            setNotificationType("error")
-            setTimeout(() =>{
-              setMessage(null)
-            }, 4000)
-            setPersons(persons.filter(p => p.id != duplictae.id))
-          })
-      }
-      return
-    }
+
+        if (status === 404) {
+          setMessage(`Information of ${duplictae.name} has already been removed from server`)
+          setPersons(persons.filter(person => person.id !== duplictae.id))
+        } else {
+          setMessage(error.response.data.error)
+        }
+
+        setNotificationType('error')
+        setTimeout(() => {
+          setMessage(null)
+        }, 4000)
+      })
+  }
+
+  return
+}
 
     const newentry ={
       name: newName,
