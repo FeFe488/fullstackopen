@@ -1,20 +1,28 @@
 require('dotenv').config()
 const express = require('express')
 const Person = require('./models/person')
+const morgan = require('morgan')
 
 const app = express()
 app.use(express.json())
+
+morgan.token('body', (req) => {
+  return JSON.stringify(req.body)
+})
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+
 app.use(express.static('dist'))
 
-const requestLogger = (req, res, next) => {
-  console.log('Method:', req.method)
-  console.log('Path:  ', req.path)
-  console.log('Body:  ', req.body)
-  console.log('---')
-  next()
-}
+// const requestLogger = (req, res, next) => {
+//   console.log('Method:', req.method)
+//   console.log('Path:  ', req.path)
+//   console.log('Body:  ', req.body)
+//   console.log('---')
+//   next()
+// }
 
-app.use(requestLogger)
+// app.use(requestLogger)
 
 app.get('/', (req, res) => {
   res.send('<h1>hello phonebook</h1>')
@@ -52,14 +60,21 @@ app.get('/api/persons/:id', (req, res, next) => {
 app.post('/api/persons', (req, res, next) => {
   const body = req.body
 
-  const entry = new Person({
-    name: body.name,
-    number: body.number,
-  })
+  Person.findOne({ name: body.name })
+    .then(existingPerson => {
+      if (existingPerson) {
+        return res.status(400).json({ error: 'name must be unique' })
+      }
 
-  entry.save()
-    .then((savedEntry) => {
-      res.json(savedEntry)
+      const entry = new Person({
+        name: body.name,
+        number: body.number,
+      })
+
+      return entry.save()
+        .then((savedEntry) => {
+          res.json(savedEntry)
+        })
     })
     .catch(error => next(error))
 })
