@@ -55,21 +55,21 @@ const initialBlogs = [
 
 
 // const nonExistingId = async () => {
-//   const note = new Note({ content: 'willremovethissoon' })
-//   await note.save()
-//   await note.deleteOne()
+//   const blog = new Blog({ content: 'willremovethissoon' })
+//   await blog.save()
+//   await blog.deleteOne()
 
-//   return note._id.toString()
+//   return blog._id.toString()
 // }
 
-// const notesInDb = async () => {
-//   const notes = await Note.find({})
-//   return notes.map(note => note.toJSON())
-// }
+const blogsInDb = async () => {
+  const blogs = await Blog.find({})
+  return blogs.map(blog => blog.toJSON())
+}
+
 
 module.exports = {
  initialBlogs,
- 
- 
-//  nonExistingId, notesInDb
+//nonExistingId,
+ blogsInDb
 }
