@@ -10,12 +10,12 @@ const Blog = require('../models/blog')
 
 const api = supertest(app)
 
-describe('get tests', () => {
-  beforeEach(async () => {
+beforeEach(async () => {
     await Blog.deleteMany({})
     await Blog.insertMany(helper.initialBlogs)
   })
 
+describe('get blogs tests', () => {
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -40,7 +40,7 @@ describe('get tests', () => {
   })
 })
 
-describe('adding tests', ()=> {
+describe('adding of a blog tests', ()=> {
   test( ' correctly added to db', async ()=>{
 
     const newBlog = {
@@ -110,7 +110,7 @@ describe('adding tests', ()=> {
   })
 })
 
-describe('deletion of a blog', () => {
+describe('deletion of a blog tests', () => {
   test('succeeds with status code 204 if id is valid', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToDelete = blogsAtStart[0]
@@ -126,7 +126,7 @@ describe('deletion of a blog', () => {
   })
 })
 
-describe('updating of a blog', ()=>{
+describe('updating of a blog tests', ()=>{
   test('a blog can be updated', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToUpdate = blogsAtStart[0]
