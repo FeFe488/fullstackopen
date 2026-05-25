@@ -64,7 +64,7 @@ describe('adding new user tests', () => {
     assert.strictEqual(usersAtEnd.length, usersAtStart.length)
   })
 
-  test.only('username length is atleast 3 and given', async ()=>{
+  test('username length is atleast 3 and given', async ()=>{
     
     const newUser = {
       username: 'ro',
@@ -81,7 +81,7 @@ describe('adding new user tests', () => {
       assert(result.body.error.includes('shorter than'))
     })
 
-    test.only('password length is atleast 3 and given', async ()=>{
+    test('password length is atleast 3 and given', async ()=>{
     
     const newUser = {
       username: 'rooo',
