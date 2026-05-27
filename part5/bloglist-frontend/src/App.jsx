@@ -102,14 +102,19 @@ const App = () => {
       }, 5000)
   }
 
-  const updateBlog = async(blogObject,id)=>{
-    const returnedBlog = await blogService.update(blogObject,id)
+  const updateBlog = async(id,blogObject)=>{
+    const returnedBlog = await blogService.update(id,blogObject)
     
     setBlogs(blogs.map(blog =>
       blog.id !== id
       ? blog
       :{...returnedBlog, user: blog.user}
     ))
+  }
+
+  const deleteBlog = async(id)=>{
+    await blogService.del(id)
+    setBlogs(blogs.filter(blog => blog.id != id))
   }
   
   const blogForm = () => (
@@ -124,11 +129,15 @@ const App = () => {
       />
     </Togglable>
 
-     {blogs.map(blog=>(
-      <Blog 
-        key={blog.id}
-        blog={blog}
-        updateBlog={updateBlog}
+
+    {[...blogs]
+      .sort((blog1,blog2) => blog2.likes -blog1.likes)
+      .map(blog=>(
+        <Blog 
+          key={blog.id}
+          blog={blog}
+          updateBlog={updateBlog}
+          deleteBlog={deleteBlog}
         />
     ))}
     
