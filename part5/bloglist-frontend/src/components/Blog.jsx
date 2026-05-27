@@ -20,7 +20,7 @@ const Blog = ({ blog , updateBlog, deleteBlog}) => {
   }
 
   const handleDeletion = () => {
-     deleteBlog = (blog.id)
+     deleteBlog(blog.id)
   }
 
 
