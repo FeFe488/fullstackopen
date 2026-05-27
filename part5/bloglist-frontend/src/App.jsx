@@ -102,9 +102,14 @@ const App = () => {
       }, 5000)
   }
 
-  const addLike = async(blogObject,id)=>{
-    const returnedBlog = await blogService.create(blogObject,id)
-    setBlogs(blogs(returnedBlog))
+  const updateBlog = async(blogObject,id)=>{
+    const returnedBlog = await blogService.update(blogObject,id)
+    
+    setBlogs(blogs.map(blog =>
+      blog.id !== id
+      ? blog
+      :{...returnedBlog, user: blog.user}
+    ))
   }
   
   const blogForm = () => (
@@ -120,7 +125,11 @@ const App = () => {
     </Togglable>
 
      {blogs.map(blog=>(
-      <Blog key={blog.id} blog={blog} />
+      <Blog 
+        key={blog.id}
+        blog={blog}
+        updateBlog={updateBlog}
+        />
     ))}
     
     </div>
