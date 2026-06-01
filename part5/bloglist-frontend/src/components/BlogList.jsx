@@ -1,4 +1,25 @@
-// import Blog from "./Blog"
+
+
+import Blog from './Blog'
+
+const BlogList = ({ blogs }) => {
+  return (
+    <div>
+      <h2>blogs</h2>
+
+      {[...blogs]
+        .sort((blog1, blog2) => blog2.likes - blog1.likes)
+        .map(blog => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+          />
+        ))}
+    </div>
+  )
+}
+
+export default BlogList
 
 
 // const BlogList = () => {

@@ -1,7 +1,16 @@
 import { useState } from "react"
+import { Link, useParams } from "react-router-dom"
 
-const Blog = ({ blog , updateBlog, deleteBlog, user}) => {
+const Blog = ({ blog ,id,
+  //  updateBlog, deleteBlog, user
+  }) => {
 
+  const id = useParams().id
+
+  if(!blog){
+    return null
+  }
+  
   const [visible,setVisible]=useState(false)
 
 
@@ -42,9 +51,8 @@ const Blog = ({ blog , updateBlog, deleteBlog, user}) => {
   return(
   <div className="blog" style={blogStyle}>
     <div>
-      <BlogList> </BlogList>
-      {/* {blog.title} {blog.author} */}
-      <button onClick={toggleVisbility}> view</button>
+      <Link to={`/blog/${blog.id}`} onClick={toggleVisbility}>{blog.title} {blog.author}</Link>
+      {/* <button onClick={toggleVisbility}> view</button> */}
     </div>
   </div>
   )
