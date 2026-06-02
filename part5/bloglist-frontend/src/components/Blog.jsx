@@ -1,79 +1,62 @@
-import { useState } from "react"
-import { Link, useParams } from "react-router-dom"
 
-const Blog = ({ blog ,id,
-  //  updateBlog, deleteBlog, user
-  }) => {
 
-  const id = useParams().id
-
-  if(!blog){
+const Blog = ({ blog, user, updateBlog, deleteBlog }) => {
+  if (!blog) {
     return null
   }
-  
-  const [visible,setVisible]=useState(false)
 
+  const handleLike = () => {
+    const updatedBlog = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1
+    }
 
-  const toggleVisbility = ()=>{
-    setVisible(!visible)
+    updateBlog(blog.id, updatedBlog)
   }
 
-  // const handleLike = () =>{
-  //   const updatedBlog = {
-  //     title: blog.title,
-  //     author: blog.author,
-  //     url: blog.url,
-  //     likes: blog.likes + 1
-  //   }
-  //   updateBlog(blog.id,updatedBlog)
-  // }
-
-  // const handleDeletion = () => {
-  //    deleteBlog(blog.id)
-  // }
-
-
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
+  const handleDeletion = () => {
+    if (window.confirm(`remove blog ${blog.title} by ${blog.author}`)) {
+      deleteBlog(blog.id)
+    }
   }
 
-  // const removeButtonStyle= {
-  //   backgroundColor: 'red',
-  //   border:'none'
-  // }
+  const ownerName = blog.user
+    ?  blog.user.name
+    : 'unknown'
 
+  const allowedToRemove =
+    user &&
+    blog.user &&
+    blog.user.username === user.username
 
-  if(!visible){
-  return(
-  <div className="blog" style={blogStyle}>
-    <div>
-      <Link to={`/blog/${blog.id}`} onClick={toggleVisbility}>{blog.title} {blog.author}</Link>
-      {/* <button onClick={toggleVisbility}> view</button> */}
-    </div>
-  </div>
-  )
-  }
+  return (
+    <div className="blog">
+      <h2>
+        {blog.author}: {blog.title}
+      </h2>
 
-  return(
-    <div className="wholeBlock" style={blogStyle}>
       <div>
-        {blog.title} {blog.author}
-        <button onClick={toggleVisbility}> view</button>
+        <a href={blog.url}>{blog.url}</a>
       </div>
-      <div>{blog.url}</div>
-      <div className="likes">{blog.likes} <button onClick={handleLike}>like</button></div>
-      <div>{blog.user.username}</div>
-      
-      {user && blog.user && blog.user.username === user.username && (
-        <div>
-          <button style={removeButtonStyle} onClick={handleDeletion}>remove</button>
-        </div>
+
+      <div>
+        likes {blog.likes}
+        {user && (
+          <button onClick={handleLike}>like</button>
+        )}
+      </div>
+
+      <div>
+        Added by {ownerName}
+      </div>
+
+      {allowedToRemove && (
+        <button onClick={handleDeletion}>
+          remove
+        </button>
       )}
-    
     </div>
   )
 }

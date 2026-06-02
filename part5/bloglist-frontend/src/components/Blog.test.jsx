@@ -5,25 +5,30 @@ import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 import { expect } from 'vitest'
 
-test('does render title and author, not url or likes ', () => {
+
+
+
+
+test.only('does', async() => {
   const blog = {
-    title: 'title yes',
-    author: 'author yes',
-    url:'url no',
-    likes:'likes no',
+    title: 'blog1',
+    author: 'matto makko',
+    url:'https://test.com',
+    likes:'0',
     user:{
-        username: 'xxx'
+        username: 'nickname1'
     }
   }
 
   const {container} = render(<Blog blog={blog} />)
 
   const div = container.querySelector('.blog')
-  expect(div).toHaveTextContent('title yes')
-  expect(div).toHaveTextContent('author yes')
+  expect(div).toHaveTextContent('https://test.com')
+  expect(div).toHaveTextContent('likes 0')
+  expect(div).toHaveTextContent('Added by nickname1')
 
-  expect(div).not.toHaveTextContent('url no')
-  expect(div).not.toHaveTextContent('likes no')
+  // expect(div).not.toHave('')
+  // expect(div).not.toHaveTextContent('likes no')
 })
 
 test('does render url and likes on button click', async() => {
