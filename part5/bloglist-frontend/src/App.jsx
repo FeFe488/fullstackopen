@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 
+
 import {
   Routes,
   Route,
@@ -17,12 +18,15 @@ import BlogList from './components/BlogList'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
+import Notification from './components/Notification'
+import {Container, AppBar, Toolbar,Button, Box, Typography} from '@mui/material'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [notification, setNotification] = useState(null)
 
   const navigate = useNavigate()
 
@@ -84,6 +88,11 @@ const App = () => {
     }))
 
     navigate('/')
+
+    setNotification({ text: `Blog '${returnedBlog.title}' by  ${returnedBlog.author} added!`, type: 'success' })
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
   }
 
   const updateBlog = async (id, blogObject) => {
@@ -106,20 +115,47 @@ const App = () => {
     padding: 5
   }
 
+  const style = { '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' } }
+  
   return (
-    <div>
-      <div>
-        <Link style={padding} to="/">blogs</Link>
+    <Container>
+      <AppBar position='static'>
+        
+        <Toolbar>
+          <Typography
+            sx={{
+              fontWeight:'bold',
+              fontSize:20,
+            }}>
+            Blog App
+          </Typography>
+          
+          <Box sx={{marginLeft: 'auto'}}>
 
-        {user && (
-          <Link style={padding} to="/create">new blog</Link>
-        )}
+            <Button color="inherit" component={Link} to="/" sx={style} >
+              blogs
+            </Button>
 
-        {user
-          ? <button onClick={handleLogout}>logout</button>
-          : <Link style={padding} to="/login">login</Link>
-        }
-      </div>
+            {user && (
+              <Button color="inherit" component={Link} to="/create" sx={style}>
+                new blog
+              </Button>
+            )}
+
+            {user
+              ? <Button onClick={handleLogout} color="inherit" sx={style}>
+                  logout
+                </Button>
+              : <Button color="inherit" component={Link} to="/login" sx={style}>
+                login
+              </Button> 
+            }
+          </Box>
+
+        </Toolbar>
+      </AppBar>
+
+      <Notification notification={notification}/>
 
       <Routes>
         <Route
@@ -159,7 +195,7 @@ const App = () => {
           }
         />
       </Routes>
-    </div>
+    </Container>
   )
 }
 

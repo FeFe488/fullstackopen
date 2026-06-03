@@ -1,85 +1,75 @@
 
 
-import { getByText, render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { render, screen } from '@testing-library/react'
+import '@testing-library/jest-dom/vitest'
+import { test, expect, describe, vi } from 'vitest'
 import Blog from './Blog'
-import { expect } from 'vitest'
 
-
-
-
-
-test.only('does', async() => {
-  const blog = {
-    title: 'blog1',
-    author: 'matto makko',
-    url:'https://test.com',
-    likes:'0',
-    user:{
-        username: 'nickname1'
-    }
+const blog = {
+  title: 'test title',
+  author: 'robert martin',
+  url: 'https://test.com',
+  likes: 1,
+  user: {
+    username: 'superuser',
+    name: 'super user'
   }
+}
 
-  const {container} = render(<Blog blog={blog} />)
-
-  const div = container.querySelector('.blog')
-  expect(div).toHaveTextContent('https://test.com')
-  expect(div).toHaveTextContent('likes 0')
-  expect(div).toHaveTextContent('Added by nickname1')
-
-  // expect(div).not.toHave('')
-  // expect(div).not.toHaveTextContent('likes no')
-})
-
-test('does render url and likes on button click', async() => {
-    
-    const blog = {
-        title:"xxx",
-        author:"xxx",
-        url: 'url yes',
-        likes: 1,
-        user:{
-            username:"xxx"
-        },
-    }
-
-    render(<Blog blog={blog}/>)
-
-    const user = userEvent.setup()
-    const button = screen.getByText('view')
-    await user.click(button)
-
-    expect(screen.getByText('url yes')).toBeInTheDocument()
-    expect(screen.getByText('1')).toBeInTheDocument()
-    
-})
-
-
-test('clicking the like button twice calls event handler handleLike twice', async () => {
+describe('single blog view', () => {
   
-  const mockHandler = vi.fn()
+  test('blog information and likes are shown to unauthenticated users. buttons are not shown', () => {
+    render(<Blog blog={blog} />)
 
-  const blog = {
-        title:"xxx",
-        author:"xxx",
-        url: 'xxx',
-        likes: 1,
-        user:{
-            username:"xxx"
-        }
-  }
+    expect(screen.getByText('robert martin: test title')).toBeInTheDocument()
+    expect(screen.getByText('https://test.com')).toBeInTheDocument()
+    expect(screen.getByText('likes 1')).toBeInTheDocument()
+    expect(screen.getByText('Added by super user')).toBeInTheDocument()
 
-  render(
-    <Blog blog={blog} updateBlog={mockHandler} />
-  )
+    expect(screen.queryByRole('button', { name: 'like' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'remove' })).not.toBeInTheDocument()
+  })
 
-  const user = userEvent.setup()
-  const viewButton = screen.getByText('view')
-  await user.click(viewButton)
+  
+  
+  test('authenticated users who are not the creator are shown only the like button', () => {
+    const loggedInUser = {
+      username: 'testuser',
+      name: 'test user'
+    }
 
-  const likeButton = screen.getByText('like')
-  await user.click(likeButton)
-  await user.click(likeButton)
+    render(
+      <Blog
+        blog={blog}
+        user={loggedInUser}
+      />
+    )
 
-  expect(mockHandler.mock.calls).toHaveLength(2)
+    expect(screen.getByText('robert martin: test title')).toBeInTheDocument()
+    expect(screen.getByText('likes 1')).toBeInTheDocument()
+
+    expect(screen.getByRole('button', { name: 'like' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'remove' })).not.toBeInTheDocument()
+  })
+
+
+
+  test('the creator of the blog is shown the delete button', () => {
+    const creator = {
+      username: 'superuser',
+      name: 'super user'
+    }
+
+    render(
+      <Blog
+        blog={blog}
+        user={creator}
+      />
+    )
+
+    expect(screen.getByText('robert martin: test title')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'like' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'remove' })).toBeInTheDocument()
+  })
+
 })
