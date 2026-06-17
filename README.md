@@ -128,6 +128,15 @@ Main topics:
 * Service modules
 * Error handling
 
+
+#### Running locally
+
+```bash
+cd part2/phonebook
+npm install
+npm run dev
+```
+
 ### Countries
 
 An application for searching countries and displaying country information.
@@ -145,6 +154,17 @@ Main topics:
 * Conditional rendering
 * Environment variables
 * Effects and asynchronous data fetching
+
+
+#### Environment variables
+
+The weather feature uses the OpenWeather API. To enable weather data, create a local `.env` file inside `part2/countries`:
+
+```env
+VITE_SOME_KEY=your_openweathermap_api_key
+```
+
+After creating or changing the `.env` file, restart the development server.
 
 ## Part 3: Programming a server with Node.js and Express
 
@@ -302,7 +322,7 @@ Typical setup:
 ```bash
 # terminal 1
 cd part4/bloglist
-npm run dev
+npm run start:test
 
 # terminal 2
 cd part5/bloglist-frontend
