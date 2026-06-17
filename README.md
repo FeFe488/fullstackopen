@@ -137,6 +137,10 @@ npm install
 npm run dev
 ```
 
+```md
+The phonebook frontend uses the `/api/persons` endpoint. In local development, Vite proxies `/api` requests to `http://localhost:3001`, so a compatible phonebook backend must be running on port `3001`.
+```
+
 ### Countries
 
 An application for searching countries and displaying country information.
